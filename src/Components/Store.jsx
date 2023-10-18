@@ -1,6 +1,6 @@
 import { NavBar } from "./Navbar"
 import { useEffect, useState } from "react"
-import PropTypes, { func } from 'prop-types'
+import PropTypes from 'prop-types'
 import  '../Styles/store.css'
 
 function Store () {
@@ -24,15 +24,10 @@ function Store () {
             const theArray = cartItems
             theArray[existingItem] = new newItem(theArray[existingItem].title, theArray[existingItem].amount + 1, theArray[existingItem]._id)
             finalArray = [...theArray]
-            console.log(theArray)
         } else {
             finalArray = [...finalArray, item]
         }
         setCartItems(finalArray)
-    }
-
-    function handleCartRemove (item) {
-
     }
 
     function handleCartPopup () {
@@ -48,7 +43,7 @@ function Store () {
     return (
         <>
             <NavBar onClick={handleCartPopup} />
-            <div className="store">
+            <div className={cartStatus == true ? 'store blur' : 'store'}>
                 {
                     fetchedItems ? 
                     fetchedItems.data.map(item => {
@@ -62,7 +57,7 @@ function Store () {
                 }
             </div>
             {
-                cartStatus ? <CartPopup onClick={() => handleCartRemove} cartItemsArray={cartItems} /> : ''
+                cartStatus ? <CartPopup setArray={setCartItems} cartItemsArray={cartItems} /> : ''
             }
         </>
     )
@@ -78,7 +73,16 @@ function StoreItem ({ title, price, id, onClick }) {
     )
 }
 
-function CartPopup ({ cartItemsArray, onClick }) {
+function CartPopup ({ cartItemsArray, setArray }) {
+    function handleRemoveItem (item) {
+        const removeItem = cartItemsArray.findIndex(cartItem =>                 
+            cartItem._id === item._id
+        )
+        const theArray = cartItemsArray
+        theArray.splice(removeItem, 1)
+        const returnArray = [...theArray]
+        setArray(returnArray)
+    }
     return (
         <div className="cartPopup">
             <h1>Cart</h1>
@@ -86,9 +90,9 @@ function CartPopup ({ cartItemsArray, onClick }) {
                 cartItemsArray.map(item => {
                     return (
                         <div key={item._id}>
-                            <p>{item.title}</p>
+                            <p className="itemHeader">{item.title}</p>
                             <p>Amount: {item.amount}</p>
-                            <button onClick={onClick}>Remove</button>
+                            <button onClick={() => handleRemoveItem(item)}>Remove</button>
                         </div>
                     )
                 })
@@ -101,6 +105,7 @@ function CartPopup ({ cartItemsArray, onClick }) {
 CartPopup.propTypes = {
     cartItemsArray: PropTypes.array,
     onClick: PropTypes.func,
+    setArray: PropTypes.func
 }
 
 StoreItem.propTypes = {

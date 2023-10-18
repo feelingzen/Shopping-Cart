@@ -1,9 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
+.root {
+    position: relative;
+}
+
 * {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 div.store {
@@ -36,5 +44,57 @@ div.store {
         > button:hover {
             cursor: pointer;
         }
+    }
+}
+
+div.cartPopup {
+    position: fixed;
+    top: 60px;
+    background-color: rgb(243, 243, 243);
+    width: min(100vw, 500px);
+    height: 100vh;
+    right: 0;
+    text-align: center;
+    transition: 1s;
+    animation: slideIn 0.3s ease-in;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    overflow-y: scroll;
+    padding: 10px;
+    > div {
+        width: 350px;
+        background-color: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
+        > .itemHeader {
+            font-weight: 600;
+        }
+        > button {
+            padding: 5px;
+            background-color: #3967ff;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 7px;
+            width: 120px;
+            height: 32px;
+        }
+    }
+}
+
+.blur {
+    filter: blur(5px);
+    transition: 0.5s;
+}
+
+@keyframes slideIn {
+    0% {
+        right: -400px;
+    }
+    100% {
+        right: 0;
     }
 }
